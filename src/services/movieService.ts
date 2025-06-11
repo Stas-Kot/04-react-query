@@ -8,7 +8,10 @@ interface GetMoviesRes {
 const BASE_URL = "https://api.themoviedb.org/3/search/movie?query=";
 const myKey = import.meta.env.VITE_TMDB_TOKEN;
 
-const fetchMovies = async (query: string, page: number) => {
+const fetchMovies = async (
+  query: string,
+  page: number
+): Promise<GetMoviesRes> => {
   const response = await axios.get<GetMoviesRes>(BASE_URL, {
     params: {
       query,
@@ -18,7 +21,7 @@ const fetchMovies = async (query: string, page: number) => {
       Authorization: `Bearer ${myKey}`,
     },
   });
-    return response.data;
-}
+  return response.data;
+};
 
 export default fetchMovies;

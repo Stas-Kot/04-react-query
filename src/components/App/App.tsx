@@ -16,7 +16,7 @@ function App() {
   const [page, setPage] = useState(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["movie", query, page],
     queryFn: () => fetchMovies(query, page),
     enabled: query !== "",
@@ -46,19 +46,19 @@ function App() {
         <Toaster />
       </div>
       <SearchBar onSubmit={handleSubmit} />
-      {data && data.total_pages > 1 && (
-        <ReactPaginate
-          pageCount={data?.total_pages ?? 0}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={1}
-          onPageChange={({ selected }) => setPage(selected + 1)}
-          forcePage={page - 1}
-          containerClassName={css.pagination}
-          activeClassName={css.active}
-          nextLabel="→"
-          previousLabel="←"
-        />
-      )}
+      {(isSuccess && data?.total_pages > 1 && (
+          <ReactPaginate
+            pageCount={data?.total_pages ?? 0}
+            pageRangeDisplayed={5}
+            marginPagesDisplayed={1}
+            onPageChange={({ selected }) => setPage(selected + 1)}
+            forcePage={page - 1}
+            containerClassName={css.pagination}
+            activeClassName={css.active}
+            nextLabel="→"
+            previousLabel="←"
+          />
+        ))}
       {isLoading && <Loader />}
       {isError && <ErrorMessage />}
       {data && data.results.length > 0 && (
